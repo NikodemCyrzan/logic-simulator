@@ -22,7 +22,7 @@ test("mnożenie 2 * 2", () => {
 
 // WYKRYTO BŁĄD
 test("mnożenie 2 * 3", () => {
-    expect(multiply(2, 2)).toBe(6);
+    expect(multiply(2, 3)).toBe(6);
 })
 
 // npm test -- tests/example.js
