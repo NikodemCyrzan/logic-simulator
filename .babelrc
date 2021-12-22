@@ -1,0 +1,19 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "android": "79",
+                    "chrome": "77",
+                    "edge": "17",
+                    "firefox": "68",
+                    "ios": "11",
+                    "opera": "63",
+                    "safari": "12.1"
+                }
+            }
+        ],
+        "@babel/preset-typescript"
+    ]
+}
