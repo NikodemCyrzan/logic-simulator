@@ -9,4 +9,3 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({});
     mainWindow.loadURL(path.join(__dirname, 'main.html'));
 });
-let a;

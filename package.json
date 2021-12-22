@@ -4,11 +4,13 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "builder": "babel assets --out-dir build -x .ts -D -w --minified",
+    "builder": "babel assets --out-dir build -x .ts -D -w",
     "start": "electron .",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=build/icons/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . electron-tutorial-app --overwrite --platform=win32 --arch=ia32 --icon=build/icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Symulator układów logicznych\"",
-    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=build/icons/icon.png --prune=true --out=release-builds"
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=build/icons/icon.png --prune=true --out=release-builds",
+    "test": "babel -x .ts --out-file temp/test.js",
+    "posttest": "node temp/test.js"
   },
   "repository": {
     "type": "git",
@@ -22,13 +24,13 @@
   "homepage": "https://github.com/NikodemCyrzan/logic-simulator#readme",
   "dependencies": {
     "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
     "@types/electron": "^1.6.10",
     "electron": "^16.0.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.5",
     "electron-packager": "^15.4.0"
   }
 }
