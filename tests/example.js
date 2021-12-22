@@ -16,17 +16,13 @@ test("dodawanie", () => {
     expect(add(254, 873)).toEqual("1127");
 })
 
-// TESTY POWINNY ZAWIERAĆ PRZYNAJMNIEJ KILKA PRÓB
-test("mnożenie 1", () => {
+test("mnożenie 2 * 2", () => {
     expect(multiply(2, 2)).toBe(4);
 })
 
 // WYKRYTO BŁĄD
-test("mnożenie 2", () => {
-    expect(multiply(2, 2)).toBe(4);
-    expect(multiply(2, 8)).toBe(16);
-    expect(multiply(4, 3)).toBe(12);
-    expect(multiply(6, 2)).toBe(12);
+test("mnożenie 2 * 3", () => {
+    expect(multiply(2, 2)).toBe(6);
 })
 
 // npm test -- tests/example.js

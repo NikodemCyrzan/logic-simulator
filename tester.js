@@ -21,10 +21,11 @@ exports.expect = expect;
 const test = async (title, callback) => {
   try {
     await callback();
-    console.log(`✔ ${title}\n`);
+    console.log("\x1b[32m", `✔ ${title}`);
+    console.log("\x1b[37m", "");
   } catch (error) {
-    console.log(`✖ ${title}\n`);
-    console.log(`${error}\n`);
+    console.log("\x1b[31m", `✖ ${title}\n`);
+    console.log("\x1b[37m", `${error}\n`);
   }
 };
 
