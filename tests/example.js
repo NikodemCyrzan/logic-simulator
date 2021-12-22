@@ -19,6 +19,7 @@ test("mnożenie 1", () => {
     expect(multiply(2, 2)).toBe(4);
 })
 
+// WYKRYTO BŁĄD
 test("mnożenie 2", () => {
     expect(multiply(2, 2)).toBe(4);
     expect(multiply(2, 8)).toBe(16);
