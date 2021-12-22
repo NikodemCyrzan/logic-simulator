@@ -19,3 +19,4 @@
 1. stwórz skrypt importujący <b>../tester.js</b> w folderze tests
 2. napisz testy
 3. uruchom testy komendą <code>npm test -- tests/[nazwa skryptu]</code>
+4. nie usuwaj ich
