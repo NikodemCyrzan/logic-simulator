@@ -8,7 +8,10 @@ exports.test = exports.expect = void 0;
 const expect = expected => {
   return {
     toBe(result) {
-      if (result !== expected) throw new Error(`\n\tgot: ${expected}\n\texpected: ${result}`);
+      if (result != expected) throw new Error(`\n\tgot: ${expected}\n\texpected: ${result}`);
+    },
+    toEqual(result) {
+      if (result !== expected) throw new Error(`\n\tgot: ${expected}: ${typeof expected}\n\texpected: ${result}: ${typeof result}`);
     }
   };
 };

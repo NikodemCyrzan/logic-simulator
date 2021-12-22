@@ -9,9 +9,11 @@ function multiply(a, b){
 }
 
 test("dodawanie", () => {
-    expect(add(2, 2)).toBe(4);
-    expect(add(4, 5)).toBe(9);
-    expect(add(254, 873)).toBe(1127);
+    // toBe sprawdza czy wartość jest taka sama
+    expect(add(2, 2)).toBe("4");
+    // toEqual sprawdza czy wartość i typ są takie same
+    expect(add(4, 5)).toEqual(9);
+    expect(add(254, 873)).toEqual("1127");
 })
 
 // TESTY POWINNY ZAWIERAĆ PRZYNAJMNIEJ KILKA PRÓB
