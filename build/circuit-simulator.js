@@ -14,7 +14,7 @@ class Circuit {
    * @param inputIndex numer pinu w tablicy wejść pierwszej bramki
    * @param outputArray tablica wyjść bramki w której znajduje się drugi pin który ma zostać powiązany
    * @param outputIndex numer pinu w tablicy wyjść drugiej bramki
-   * @param data objekt danych połączenia
+   * @param data obiekt danych połączenia
    */
   createConnection(outputArray, outputIndex, inputArray, inputIndex) {
     let data = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {
