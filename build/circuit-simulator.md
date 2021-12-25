@@ -10,11 +10,11 @@ Tworzy układ scalony z dwoma wejściami i jednym wyjściem.
 
 ## Dodawanie wejść i wyjść
 
-Służą do tego dwie metody, <code>addInput</code> i <code>addOutput</code>. Obie nie przyjmują żadnych parametrów.
+Służą do tego dwie metody: <code>addInput</code> i <code>addOutput</code>. Obie nie przyjmują żadnych parametrów.
 
 ## Usuwanie wejść i wyjść
 
-Służą do tego dwie metody, <code>removeInput</code> i <code>removeOutput</code>. Obie przyjmują parametr index typu <code>number</code>.
+Służą do tego dwie metody: <code>removeInput</code> i <code>removeOutput</code>. Obie przyjmują parametr index typu <code>number</code>.
 
 ## Tworzenie bramek
 
