@@ -1,4 +1,4 @@
-export class Circiut {
+export class Circuit {
     public inputs: Array<Connection> = [];
     public outputs: Array<Connection> = [];
     public gates: Array<Gate>;
@@ -88,19 +88,59 @@ export class Gate {
 
 export class Connection{
     public state: number;
+    public outGate: Gate;
+    public inGates: Array<Gate> = [];
 
-    constructor(state: number = 0){
+    constructor(state: number = 0, inGate?: Gate, outGate?: Gate){
         this.state = state;
+        if (inGate != undefined)
+            this.inGates.push(inGate);
+        if (outGate != undefined)
+            this.outGate = outGate;
+    }
+
+    public setState(state: number){
+        this.state = state;
+        if (this.inGates.length != 0)
+            for (let i = 0; i < this.inGates.length; i++)
+                if (!this.inGates[i].inputs.includes(undefined) && !this.inGates[i].outputs.includes(undefined))
+                    this.inGates[i].code(this.inGates[i].inputs, this.inGates[i].outputs);
     }
 }
 
-const andCode = (inputs: Array<{state: number}>, outputs: Array<{state: number}>): any => {
-    outputs[0].state = inputs[0].state == 1 && inputs[1].state == 1 ? 1 : 0;
+const andCode = (inputs: Array<Connection>, outputs: Array<Connection>): any => {
+    outputs[0].setState(inputs[0].state == 1 && inputs[1].state == 1 ? 1 : 0);
 }
 
-const notCode = (inputs: Array<{state: number}>, outputs: Array<{state: number}>): any => {
-    outputs[0].state = inputs[0].state == 0 ? 1 : 0;
+const notCode = (inputs: Array<Connection>, outputs: Array<Connection>): any => {
+    outputs[0].setState(inputs[0].state == 0 ? 1 : 0);
 };
 
 export const AND = () => new Gate(andCode, 2, 1);
 export const NOT = () => new Gate(notCode, 1, 1);
+
+let circuit = new Circuit(4, 1);
+
+let leftAnd1 = AND();
+let leftAnd2 = AND();
+let rightAnd = AND();
+
+circuit.connectGateToInput(0, leftAnd1, 0, new Connection(0, leftAnd1));
+circuit.connectGateToInput(1, leftAnd1, 1, new Connection(0, leftAnd1));
+
+circuit.connectGateToInput(2, leftAnd2, 0, new Connection(0, leftAnd2));
+circuit.connectGateToInput(3, leftAnd2, 1, new Connection(0, leftAnd2));
+
+circuit.connectGates(leftAnd1, 0, rightAnd, 0, new Connection(0, rightAnd, leftAnd1));
+circuit.connectGates(leftAnd2, 0, rightAnd, 1, new Connection(0, rightAnd, leftAnd2));
+
+circuit.connectGateToOutput(0, rightAnd, 0, new Connection(0, null, rightAnd));
+
+console.log(circuit.outputs[0]);
+
+circuit.inputs[0].setState(1);
+circuit.inputs[1].setState(1);
+circuit.inputs[2].setState(1);
+circuit.inputs[3].setState(1);
+
+console.log(circuit.outputs[0]);
