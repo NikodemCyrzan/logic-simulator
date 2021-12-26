@@ -29,10 +29,10 @@ Aby stworzyć nową bramkę, trzeba najpierw napisać jej kod:
 
     (inputs: Array<Connection>, outputs: Array<Connection>) => any
 
-Funkcja nie zwraca żadnych wartości, a wyjścia muszą być przypisane we wnętrzu. Przykładowy kod bramki (TypeScript):
+Funkcja nie zwraca żadnych wartości, a wyjścia muszą być przypisane we wnętrzu. Przykładowy kod bramki AND (TypeScript):
 
-    const code = (inputs: Array<Connection>, outputs: Array<Connection>): any => {
-        outputs[0].state = inputs[0].state == 1 && inputs[1].state == 1 ? 1 : 0;
+    const andCode = (inputs: Array<Connection>, outputs: Array<Connection>): any => {
+    outputs[0].setState(inputs[0].state == 1 && inputs[1].state == 1 ? 1 : 0);
     }
 
 Następnie tworzy się instancję klasy <code>Gate</code>, która przyjmuje jako parametry: funkcję, ilość wejść oraz ilość wyjść.
