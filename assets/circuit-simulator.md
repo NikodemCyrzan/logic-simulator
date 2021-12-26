@@ -72,6 +72,20 @@ Przyjmuje 4 parametry. Indeks wyjścia układu scalonego, instancję bramki, ind
 
     circuit.connectGateToOutput(0, not, 0, new Connection());
 
+## Zmiana stanu połączenia
+
+Stan może wynosić 1 lub 0, co oznacza prąd płynący przez połączenie, lub nie. Można go zmienić za pomocą metody <code>setState</code> wbudowanej w klasę <code>Connection</code>.
+
+    let circuit = new Circuit(1, 1);
+    let not1 = new Gate(notCode, 1, 1);
+    let not2 = new Gate(notCode, 1, 1);
+
+    circuit.connectGateToInput(0, not, 0, new Connection(0, not));
+    circuit.connectGateToOutput(0, not2, 0, new Connection(0, null, not2));
+    circuit.connectGates(not1, 0, not2, 0);
+
+    circuit.inputs[0].setState(1);
+
 ## Wykonywanie obliczeń
 
 <p>
