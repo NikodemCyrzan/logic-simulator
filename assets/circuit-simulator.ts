@@ -1,4 +1,4 @@
-export class Circuit {
+class Circuit {
     public inputs: Array<Connection> = [];
     public outputs: Array<Connection> = [];
     public gates: Array<Gate>;
@@ -55,7 +55,7 @@ export class Circuit {
     }
 }
 
-export class Gate {
+class Gate {
     public inputs: Array<Connection> = [];
     public outputs: Array<Connection> = [];
 
@@ -86,7 +86,7 @@ export class Gate {
     }
 }
 
-export class Connection{
+class Connection{
     public state: number;
     public outGate: Gate;
     public inGates: Array<Gate> = [];
@@ -116,31 +116,5 @@ const notCode = (inputs: Array<Connection>, outputs: Array<Connection>): any => 
     outputs[0].setState(inputs[0].state == 0 ? 1 : 0);
 };
 
-export const AND = () => new Gate(andCode, 2, 1);
-export const NOT = () => new Gate(notCode, 1, 1);
-
-let circuit = new Circuit(4, 1);
-
-let leftAnd1 = AND();
-let leftAnd2 = AND();
-let rightAnd = AND();
-
-circuit.connectGateToInput(0, leftAnd1, 0, new Connection(0, leftAnd1));
-circuit.connectGateToInput(1, leftAnd1, 1, new Connection(0, leftAnd1));
-
-circuit.connectGateToInput(2, leftAnd2, 0, new Connection(0, leftAnd2));
-circuit.connectGateToInput(3, leftAnd2, 1, new Connection(0, leftAnd2));
-
-circuit.connectGates(leftAnd1, 0, rightAnd, 0, new Connection(0, rightAnd, leftAnd1));
-circuit.connectGates(leftAnd2, 0, rightAnd, 1, new Connection(0, rightAnd, leftAnd2));
-
-circuit.connectGateToOutput(0, rightAnd, 0, new Connection(0, null, rightAnd));
-
-console.log(circuit.outputs[0]);
-
-circuit.inputs[0].setState(1);
-circuit.inputs[1].setState(1);
-circuit.inputs[2].setState(1);
-circuit.inputs[3].setState(1);
-
-console.log(circuit.outputs[0]);
+const AND = () => new Gate(andCode, 2, 1);
+const NOT = () => new Gate(notCode, 1, 1);

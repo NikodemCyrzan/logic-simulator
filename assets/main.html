@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hello World!</title>
+        <title>Symulator układów scalonych</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="./circuit-simulator.js"></script>
+        <script src="./konva.js" defer></script>
+        <script src="./main.js" defer></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>
-            Hello World!
-        </h1>
+        <div class="circuit-properties">
+            <div class="tools">
+                <svg id="save" width="24" height="24" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M35.1507 5.87868C34.588 5.31607 33.825 5 33.0293 5H8C6.34315 5 5 6.34315 5 8V42C5 43.6569 6.34315 45 8 45H42C43.6569 45 45 43.6569 45 42V16.9707C45 16.175 44.6839 15.412 44.1213 14.8493L35.1507 5.87868ZM9 13.5C9 11.567 10.567 10 12.5 10H24.5C26.433 10 28 11.567 28 13.5C28 15.433 26.433 17 24.5 17H12.5C10.567 17 9 15.433 9 13.5ZM24.5 39C28.0899 39 31 36.0899 31 32.5C31 28.9101 28.0899 26 24.5 26C20.9101 26 18 28.9101 18 32.5C18 36.0899 20.9101 39 24.5 39Z" fill="black"/>
+                </svg>
+                <input type="text" placeholder="nazwa">
+            </div>
+            <div class="tools">
+                <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1924 34.3848L11 34.1924V27H3V23H11V16.1924L11.1924 16L20.3848 25.1924L11.1924 34.3848Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M34 13C35.1046 13 36 13.8954 36 15V18H39V15C39 13.8954 39.8954 13 41 13C42.1046 13 43 13.8954 43 15V18H44C45.6569 18 47 19.3431 47 21V30C47 30.793 46.6923 31.5141 46.1898 32.0505C44.6584 28.4918 41.1202 26 37 26C31.4772 26 27 30.4772 27 36C27 36.3373 27.0167 36.6707 27.0493 36.9994C27.0329 36.9998 27.0165 37 27 37C25.8954 37 25 36.1046 25 35V33H24C22.3431 33 21 31.6569 21 30V21C21 19.3431 22.3431 18 24 18H25V15C25 13.8954 25.8954 13 27 13C28.1046 13 29 13.8954 29 15V18H32V15C32 13.8954 32.8954 13 34 13Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M34 13C35.1046 13 36 13.8954 36 15V18H39V15C39 13.8954 39.8954 13 41 13C42.1046 13 43 13.8954 43 15V18H44C45.6569 18 47 19.3431 47 21V30C47 30.793 46.6923 31.5141 46.1898 32.0505C44.6584 28.4918 41.1202 26 37 26C31.4772 26 27 30.4772 27 36C27 36.3373 27.0167 36.6707 27.0493 36.9994C27.0329 36.9998 27.0165 37 27 37C25.8954 37 25 36.1046 25 35V33H24C22.3431 33 21 31.6569 21 30V21C21 19.3431 22.3431 18 24 18H25V15C25 13.8954 25.8954 13 27 13C28.1046 13 29 13.8954 29 15V18H32V15C32 13.8954 32.8954 13 34 13Z" fill="black"/>
+                    <line x1="32" y1="35.8501" x2="42" y2="35.8501" stroke="black" stroke-width="3" stroke-linecap="square"/>
+                    <line x1="36.75" y1="41" x2="36.75" y2="31" stroke="black" stroke-width="3" stroke-linecap="square"/>
+                </svg>
+                <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1924 34.3848L11 34.1924V27H3V23H11V16.1924L11.1924 16L20.3848 25.1924L11.1924 34.3848Z" fill="lightgray"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M34 13C35.1046 13 36 13.8954 36 15V18H39V15C39 13.8954 39.8954 13 41 13C42.1046 13 43 13.8954 43 15V18H44C45.6569 18 47 19.3431 47 21V30C47 30.793 46.6923 31.5141 46.1898 32.0505C44.6584 28.4918 41.1202 26 37 26C31.4772 26 27 30.4772 27 36C27 36.3373 27.0167 36.6707 27.0493 36.9994C27.0329 36.9998 27.0165 37 27 37C25.8954 37 25 36.1046 25 35V33H24C22.3431 33 21 31.6569 21 30V21C21 19.3431 22.3431 18 24 18H25V15C25 13.8954 25.8954 13 27 13C28.1046 13 29 13.8954 29 15V18H32V15C32 13.8954 32.8954 13 34 13Z" fill="lightgray"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M34 13C35.1046 13 36 13.8954 36 15V18H39V15C39 13.8954 39.8954 13 41 13C42.1046 13 43 13.8954 43 15V18H44C45.6569 18 47 19.3431 47 21V30C47 30.793 46.6923 31.5141 46.1898 32.0505C44.6584 28.4918 41.1202 26 37 26C31.4772 26 27 30.4772 27 36C27 36.3373 27.0167 36.6707 27.0493 36.9994C27.0329 36.9998 27.0165 37 27 37C25.8954 37 25 36.1046 25 35V33H24C22.3431 33 21 31.6569 21 30V21C21 19.3431 22.3431 18 24 18H25V15C25 13.8954 25.8954 13 27 13C28.1046 13 29 13.8954 29 15V18H32V15C32 13.8954 32.8954 13 34 13Z" fill="lightgray"/>
+                    <line x1="32" y1="35.8501" x2="42" y2="35.8501" stroke="lightgray" stroke-width="3" stroke-linecap="square"/>
+                </svg>
+                <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M38.1924 34.3848L38 34.1924V27H30V23H38V16.1924L38.1924 16L47.3848 25.1924L38.1924 34.3848Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 13C17.1046 13 18 13.8954 18 15V18H21V15C21 13.8954 21.8954 13 23 13C24.1046 13 25 13.8954 25 15V18H26C27.6569 18 29 19.3431 29 21V30C29 30.793 28.6923 31.5141 28.1898 32.0505C26.6584 28.4918 23.1202 26 19 26C13.4772 26 9 30.4772 9 36C9 36.3373 9.0167 36.6707 9.04932 36.9994C9.03293 36.9998 9.01649 37 9 37C7.89543 37 7 36.1046 7 35V33H6C4.34315 33 3 31.6569 3 30V21C3 19.3431 4.34315 18 6 18H7V15C7 13.8954 7.89543 13 9 13C10.1046 13 11 13.8954 11 15V18H14V15C14 13.8954 14.8954 13 16 13Z" fill="black"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 13C17.1046 13 18 13.8954 18 15V18H21V15C21 13.8954 21.8954 13 23 13C24.1046 13 25 13.8954 25 15V18H26C27.6569 18 29 19.3431 29 21V30C29 30.793 28.6923 31.5141 28.1898 32.0505C26.6584 28.4918 23.1202 26 19 26C13.4772 26 9 30.4772 9 36C9 36.3373 9.0167 36.6707 9.04932 36.9994C9.03293 36.9998 9.01649 37 9 37C7.89543 37 7 36.1046 7 35V33H6C4.34315 33 3 31.6569 3 30V21C3 19.3431 4.34315 18 6 18H7V15C7 13.8954 7.89543 13 9 13C10.1046 13 11 13.8954 11 15V18H14V15C14 13.8954 14.8954 13 16 13Z" fill="black"/>
+                    <line x1="14" y1="35.8501" x2="24" y2="35.8501" stroke="black" stroke-width="3" stroke-linecap="square"/>
+                    <line x1="18.75" y1="41" x2="18.75" y2="31" stroke="black" stroke-width="3" stroke-linecap="square"/>
+                </svg>
+                <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M38.1924 34.3848L38 34.1924V27H30V23H38V16.1924L38.1924 16L47.3848 25.1924L38.1924 34.3848Z" fill="lightgray"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 13C17.1046 13 18 13.8954 18 15V18H21V15C21 13.8954 21.8954 13 23 13C24.1046 13 25 13.8954 25 15V18H26C27.6569 18 29 19.3431 29 21V30C29 30.793 28.6923 31.5141 28.1898 32.0505C26.6584 28.4918 23.1202 26 19 26C13.4772 26 9 30.4772 9 36C9 36.3373 9.0167 36.6707 9.04932 36.9994C9.03293 36.9998 9.01649 37 9 37C7.89543 37 7 36.1046 7 35V33H6C4.34315 33 3 31.6569 3 30V21C3 19.3431 4.34315 18 6 18H7V15C7 13.8954 7.89543 13 9 13C10.1046 13 11 13.8954 11 15V18H14V15C14 13.8954 14.8954 13 16 13Z" fill="lightgray"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 13C17.1046 13 18 13.8954 18 15V18H21V15C21 13.8954 21.8954 13 23 13C24.1046 13 25 13.8954 25 15V18H26C27.6569 18 29 19.3431 29 21V30C29 30.793 28.6923 31.5141 28.1898 32.0505C26.6584 28.4918 23.1202 26 19 26C13.4772 26 9 30.4772 9 36C9 36.3373 9.0167 36.6707 9.04932 36.9994C9.03293 36.9998 9.01649 37 9 37C7.89543 37 7 36.1046 7 35V33H6C4.34315 33 3 31.6569 3 30V21C3 19.3431 4.34315 18 6 18H7V15C7 13.8954 7.89543 13 9 13C10.1046 13 11 13.8954 11 15V18H14V15C14 13.8954 14.8954 13 16 13Z" fill="lightgray"/>
+                    <line x1="14" y1="35.8501" x2="24" y2="35.8501" stroke="lightgray" stroke-width="3" stroke-linecap="square"/>
+                </svg> 
+            </div>
+            <div class="tools">
+                Niestandardowe wejście
+            </div>
+        </div>
+        <div class="gates-panel">
+            <div class="gate">
+                <div class="gate__img">
+                    AND
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                </div>
+                <div class="gate__title">
+                    bramka AND 
+                </div>
+                <div class="gate__edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </div>
+            </div>
+            <div class="gate">
+                <div class="gate__img">
+                    NOT
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="bottom-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                    <div class="top-leg"></div>
+                </div>
+                <div class="gate__title">
+                    bramka NOT
+                </div>
+                <div class="gate__edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="workspace" id="workspace"></div>
+        <div class="grid-toggle" id="grid-toggle">
+            <svg width="28" height="28" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M4.99112 4.83432C4.21007 4.05327 2.94374 4.05327 2.16269 4.83432C1.38164 5.61537 1.38164 6.8817 2.16269 7.66275L4.99994 10.5V42C4.99994 43.6569 6.34309 45 7.99994 45H39.4999L41.8372 47.3373C42.6183 48.1183 43.8846 48.1183 44.6656 47.3373C45.4467 46.5562 45.4467 45.2899 44.6656 44.5088L4.99112 4.83432ZM35.4999 41L32.9999 38.5V41H35.4999ZM27.4999 33L28.9999 34.5V41H20.9999V33H27.4999ZM23.4999 29L20.9999 26.5V29H23.4999ZM15.4999 21L16.9999 22.5V29H8.99994V21H15.4999ZM11.4999 17L8.99994 14.5V17H11.4999ZM16.9999 9V11.3431L20.9999 15.3431V9H28.9999V17H22.6568L26.6568 21H28.9999V23.3431L32.9999 27.3431V21H40.9999V29H34.6568L38.6568 33H40.9999V35.3431L44.9999 39.3431V8C44.9999 6.34315 43.6568 5 41.9999 5H10.6568L14.6568 9H16.9999ZM32.9999 9H40.9999V17H32.9999V9ZM8.99994 33H16.9999V41H8.99994V33Z" fill="lightgray"/>
+            </svg>                
+        </div>
     </body>
 </html>
