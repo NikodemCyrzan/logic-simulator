@@ -1,5 +1,7 @@
 const { ipcRenderer } = require("electron");
 
+let circuit = new Circuit(1, 1);
+
 let scale = 1;
 let gridOn = false;
 let gridAdded = false;
@@ -20,12 +22,17 @@ document.getElementById("save").addEventListener('click', () => {
 ipcRenderer.on('ask:save', () => {
     openSaveWindow();
 })
+ipcRenderer.on('ask:grid-toggle', () => {
+    toggleGrid();
+})
+ipcRenderer.on('ask:new', () => {
+    toggleGrid();
+})
 
 let gridLayer = new Konva.Layer();
 let mainLayer = new Konva.Layer();
 
-createGrid();
-
+stage.add(gridLayer);
 stage.add(mainLayer);
 
 function createGrid(){
@@ -84,7 +91,7 @@ function createGrid(){
 
 function toggleGrid(){
     if (!gridAdded){
-        stage.add(gridLayer);
+        createGrid()
         gridAdded = true;
     }
     if (gridOn){
@@ -103,4 +110,111 @@ function toggleGrid(){
 
 function openSaveWindow(){
     ipcRenderer.send('open:save', "ELON", "")
+}
+
+drawObject({inputsCount: 2, outputsCount: 1, color: "#121212", name: "AND"})
+drawObject({inputsCount: 1, outputsCount: 1, color: "#121212", name: "NOT"})
+
+function drawObject({x, y, inputsCount, outputsCount, name, color}){
+    let width = 1;
+    let height = (inputsCount >= outputsCount ? inputsCount : outputsCount) == 0 ? 1 : (inputsCount >= outputsCount ? inputsCount : outputsCount);
+    let children = [];
+
+    let shadowRect = new Konva.Rect({
+        x: x,
+        y: y,
+        width: width * 40,
+        height: height * 40,
+        fill: "#c4c4c4",
+        strokeWidth: 1,
+        stroke: "#c4c4c4",
+        cornerRadius: 4
+    });
+
+    let rect = new Konva.Rect({
+        x: x,
+        y: y,
+        width: width * 40,
+        height: height * 40,
+        fill: color,
+        strokeWidth: 3,
+        stroke: "black",
+        cornerRadius: 4,
+        draggable: true
+    });
+
+    let nameEl = new Konva.Text({
+        text: name,
+        fill: "white",
+        x: width * 20,
+        y: height * 20,
+        listening: false
+    });
+    nameEl.setX(rect.x() + width * 20 - nameEl.width() / 2);
+    nameEl.setY(rect.y() + height * 20 - nameEl.height() / 2);
+    children.push(nameEl);
+
+    rect.on('dragstart', (e) => {
+        if (!gridOn)
+            return;
+        shadowRect.show();
+        shadowRect.moveDown();
+        rect.moveToTop();
+        nameEl.moveToTop();
+    });
+    rect.on('dragend', (e) => {
+        if (!gridOn){
+            rect.position({
+                x: rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x()),
+                y: rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())
+            });
+            for (let i = 0; i < children.length; i++) {
+                children[i].position({
+                    x: rect.x() + width * 20 - children[i].width() / 2,
+                    y: rect.y() + height * 20 - children[i].height() / 2
+                });
+            }
+            return;
+        }
+        rect.position({
+            x: Math.round((rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x())) / 40) * 40,
+            y: Math.round((rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())) / 40) * 40
+        });
+        for (let i = 0; i < children.length; i++) {
+            children[i].position({
+                x: rect.x() + width * 20 - children[i].width() / 2,
+                y: rect.y() + height * 20 - children[i].height() / 2
+            });
+        }
+        shadowRect.hide();
+    });
+    rect.on('dragmove', (e) => {
+        for (let i = 0; i < children.length; i++) {
+            children[i].position({
+                x: rect.x() + width * 20 - children[i].width() / 2,
+                y: rect.y() + height * 20 - children[i].height() / 2
+            });
+        }
+        if (!gridOn)
+            return;
+        shadowRect.position({
+            x: Math.round((rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x())) / 40) * 40,
+            y: Math.round((rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())) / 40) * 40
+        });
+    });
+
+    rect.on('mouseover', function () {
+        document.body.style.cursor = 'move';
+    });
+    rect.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+    });
+
+    mainLayer.add(shadowRect);
+    shadowRect.hide();
+
+    mainLayer.add(rect);
+    mainLayer.add(nameEl);
+
+    return {rect: rect, name: nameEl, shadowRect: shadowRect};
 }

@@ -25,8 +25,13 @@ app.on('ready', () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    }
+    },
+    width: 2000,
+    height: 2000,
+    minWidth: 700,
+    minHeight: 500
   });
+  mainWindow.maximize();
   mainWindow.loadURL(_path.default.join(__dirname, 'html/main.html'));
   mainWindow.on('closed', () => {
     app.quit();
@@ -35,8 +40,6 @@ app.on('ready', () => {
   const mainMenu = _electron.Menu.buildFromTemplate(menuTemplate);
 
   _electron.Menu.setApplicationMenu(mainMenu);
-
-  createColorPickerWindow();
 });
 
 function createSaveWindow() {
@@ -45,8 +48,8 @@ function createSaveWindow() {
       nodeIntegration: true,
       contextIsolation: false
     },
-    width: 230,
-    height: 120,
+    width: 300,
+    height: 180,
     title: "Zapisz układ",
     minimizable: false,
     resizable: false,
@@ -63,28 +66,6 @@ function createSaveWindow() {
   mainWindow.setEnabled(false);
 }
 
-function createColorPickerWindow() {
-  colorPickerWindow = new BrowserWindow({
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    },
-    width: 300,
-    height: 300,
-    title: "Wybierz kolor",
-    minimizable: false,
-    resizable: false,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    autoHideMenuBar: true,
-    modal: true
-  });
-  saveWindow.loadURL(_path.default.join(__dirname, 'html/save.html'));
-  saveWindow.on('close', () => {
-    colorPickerWindow = null;
-  });
-}
-
 ipcMain.on('save:circuit', (event, items) => {
   saveWindow.close();
 
@@ -97,10 +78,19 @@ ipcMain.on('open:save', (event, items) => {
 });
 ipcMain.on('get-data', () => {
   saveWindow.webContents.send('save:data', saveData);
+  saveData = null;
 });
 const menuTemplate = [{
   label: "Plik",
   submenu: [{
+    label: "Nowy układ",
+    accelerator: "CmdOrCtrl+N",
+
+    click() {
+      mainWindow.webContents.send('ask:new');
+    }
+
+  }, {
     label: "Zapisz",
     accelerator: "CmdOrCtrl+S",
 
@@ -112,10 +102,20 @@ const menuTemplate = [{
 }, {
   label: "Widok",
   submenu: [{
-    type: "checkbox",
     label: "Tryb siatki",
     accelerator: 'CmdOrCtrl+G',
-    checked: false
+
+    click() {
+      mainWindow.webContents.send('ask:grid-toggle');
+    }
+
   }]
+}, {
+  label: "Dokumentacja",
+
+  click() {
+    alert("nie ma!");
+  }
+
 }];
 if (process.platform == 'darwin') menuTemplate.unshift(null);
