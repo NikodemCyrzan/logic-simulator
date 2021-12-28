@@ -13,5 +13,5 @@ const {
 let mainWindow;
 app.on('ready', () => {
   mainWindow = new BrowserWindow({});
-  mainWindow.loadURL(_path.default.join(__dirname, 'main.html'));
+  mainWindow.loadURL(_path.default.join(__dirname, 'html/main.html'));
 });

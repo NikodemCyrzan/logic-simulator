@@ -1,5 +1,6 @@
 :root{
     --circuit-properties-height: 50px;
+    --gates-panel-width: 236px;
 }
 
 body {
@@ -29,10 +30,10 @@ body {
 
 .workspace{
     position: absolute;
-    top: calc(var(--circuit-properties-height));
+    top: var(--circuit-properties-height);
     right: 0;
     bottom: 0;
-    left: 256px;
+    left: var(--gates-panel-width);
     overflow: scroll;
 }
 .workspace::-webkit-scrollbar{
@@ -50,7 +51,7 @@ body {
     left: 0;
     top: var(--circuit-properties-height);
     bottom: 0;
-    width: 256px;
+    width: var(--gates-panel-width);
     background-color: white;
     border-top: 1px solid lightgray;
     overflow-y: scroll;
@@ -115,11 +116,18 @@ body {
     border-radius: 5px;
     margin: 20px;
     padding: 20px;
+    padding-bottom: 0;
     user-select: none;
+}
+.img-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .gate__img{
     position: relative;
-    height: 70px;
+    height: 50px;
+    width: 100px;
     background-color: rgb(0, 0, 0);
     border-radius: 10px;
     color: rgb(180, 180, 180);
@@ -133,45 +141,45 @@ body {
 .gate__img::after{
     position: absolute;
     background-color: white;
-    height: 20px;
-    width: 20px;
-    right: -10px;
+    height: 13px;
+    width: 13px;
+    right: -7.5px;
     content: '';
     border-radius: 50%;
 }
 .bottom-leg, .top-leg{
     position: absolute;
     height: 10px;
-    width: 20px;
-    background-color: #8b8b8b;
+    width: 10px;
 }
 .bottom-leg{
     border-radius: 0 0 3px 3px;
     bottom: -10px;
+    background: linear-gradient(180deg, rgba(161,161,161,1) 0%, rgba(222,222,222,1) 17%, rgba(162,162,162,1) 100%);
 }
 .top-leg{
     border-radius: 3px 3px 0 0;
     top: -10px;
+    background: linear-gradient(0deg, rgba(161,161,161,1) 0%, rgba(222,222,222,1) 17%, rgba(162,162,162,1) 100%);
 }
 .bottom-leg:nth-child(1), .top-leg:nth-child(6){
-    left: 15px;
+    left: 10px;
 }
 .bottom-leg:nth-child(2), .top-leg:nth-child(7){
-    left: 45px;
+    left: 32.5px;
 }
 .bottom-leg:nth-child(3), .top-leg:nth-child(8){
-    left: 75px;
+    left: 55px;
 }
 .bottom-leg:nth-child(4), .top-leg:nth-child(9){
-    left: 105px;
+    left: 77.5px;
 }
 .bottom-leg:nth-child(5), .top-leg:nth-child(10){
-    left: 135px;
+    left: 100px;
 }
 .gate__title{
-    margin-top: 25px;
-    font-weight: bolder;
-    max-width: 80%;
+    text-align: center;
+    margin: 25px 25px 0 25px;
     word-wrap: break-word;
 }
 .gate:hover .gate__edit{
@@ -180,7 +188,7 @@ body {
 .gate__edit{
     display: none;
     position: absolute;
-    top: 115px;
+    top: 90px;
     right: 20px;
     cursor: pointer;
 }
