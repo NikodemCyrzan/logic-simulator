@@ -112,11 +112,11 @@ function openSaveWindow(){
     ipcRenderer.send('open:save', "ELON", "")
 }
 
+drawObject({inputsCount: 0, outputsCount: 1, color: "#121212", name: "A", width: 1})
 drawObject({inputsCount: 2, outputsCount: 1, color: "#121212", name: "AND"})
 drawObject({inputsCount: 1, outputsCount: 1, color: "#121212", name: "NOT"})
 
-function drawObject({x, y, inputsCount, outputsCount, name, color}){
-    let width = 1;
+function drawObject({x, y, width = 2, inputsCount, outputsCount, name, color}){
     let height = (inputsCount >= outputsCount ? inputsCount : outputsCount) == 0 ? 1 : (inputsCount >= outputsCount ? inputsCount : outputsCount);
     let children = [];
 
