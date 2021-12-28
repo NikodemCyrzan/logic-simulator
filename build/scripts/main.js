@@ -1,3 +1,5 @@
+const { ipcRenderer } = require("electron");
+
 let scale = 1;
 let gridOn = false;
 let gridAdded = false;
@@ -10,13 +12,14 @@ let stage = new Konva.Stage({
     height: workspaceHeight()
 });
 
-window.addEventListener('resize', () => {
-    //stage.width(workspaceWidth());
-    //stage.height(workspaceHeight());
-    //createGrid();
-})
-
 document.getElementById("grid-toggle").addEventListener('click', toggleGrid);
+document.getElementById("save").addEventListener('click', () => {
+    openSaveWindow();
+});
+
+ipcRenderer.on('ask:save', () => {
+    openSaveWindow();
+})
 
 let gridLayer = new Konva.Layer();
 let mainLayer = new Konva.Layer();
@@ -96,4 +99,8 @@ function toggleGrid(){
     }
 
     gridOn = !gridOn;
+}
+
+function openSaveWindow(){
+    ipcRenderer.send('open:save', "ELON", "")
 }

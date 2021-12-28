@@ -192,3 +192,24 @@ body {
     right: 20px;
     cursor: pointer;
 }
+
+.save-form input{
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    padding: 2px 5px;
+}
+.save-form input:focus{
+    border-color: black;
+    outline: 1px solid black;
+}
+.save-form p{
+    display: flex;
+    justify-content: center;
+}
+.save-form button{
+    background-color: black;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+}

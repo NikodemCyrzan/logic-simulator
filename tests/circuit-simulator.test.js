@@ -1,5 +1,5 @@
 import {expect, test} from '../tester';
-import {AND, NOT, Connection} from '../build/circuit-simulator';
+import {AND, NOT, Connection} from '../build/scripts/circuit-simulator';
 
 /////////////////////////////////////
 // AND
