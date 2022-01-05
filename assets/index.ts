@@ -27,8 +27,6 @@ app.on('ready', () => {
     })
     
     const mainMenu = Menu.buildFromTemplate(menuTemplate);
-    
-    Menu.setApplicationMenu(mainMenu);
 });
 
 function createSaveWindow(){

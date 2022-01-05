@@ -1,9 +1,8 @@
 const { ipcRenderer } = require("electron");
 
-let circuit = new Circuit(1, 1);
-
 let scale = 1;
 let gridOn = false;
+let gridCellSize = () => 40;
 let gridAdded = false;
 const workspaceWidth = () => 2000 * scale;
 const workspaceHeight = () => 2000 * scale;
@@ -40,25 +39,27 @@ function createGrid(){
         if (x % 2 == 0)
             gridLayer.add(new Konva.Line({
                 points: [
-                    x * 40,
+                    x * gridCellSize(),
                     0,
-                    x * 40,
+                    x * gridCellSize(),
                     workspaceHeight()
                 ],
                 stroke: "lightgray",
-                strokeWidth: 2
+                strokeWidth: 2,
+                listening: false
             }));
         else
             gridLayer.add(new Konva.Line({
                 points: [
-                    x * 40,
+                    x * gridCellSize(),
                     0,
-                    x * 40,
+                    x * gridCellSize(),
                     workspaceHeight()
                 ],
                 stroke: "lightgray",
                 strokeWidth: 1,
                 dash: [10.5, 5, 9, 5, 10.5, 0],
+                listening: false
             }));
     }
     
@@ -67,24 +68,26 @@ function createGrid(){
             gridLayer.add(new Konva.Line({
                 points: [
                     0,
-                    y * 40,
+                    y * gridCellSize(),
                     workspaceWidth(),
-                    y * 40
+                    y * gridCellSize()
                 ],
                 stroke: "lightgray",
-                strokeWidth: 2
+                strokeWidth: 2,
+                listening: false
             }));
         else
             gridLayer.add(new Konva.Line({
                 points: [
                     0,
-                    y * 40,
+                    y * gridCellSize(),
                     workspaceWidth(),
-                    y * 40
+                    y * gridCellSize()
                 ],
                 stroke: "lightgray",
                 strokeWidth: 1,
                 dash: [10.5, 5, 9, 5, 10.5, 0],
+                listening: false
             }));
     }
 }
@@ -112,109 +115,106 @@ function openSaveWindow(){
     ipcRenderer.send('open:save', "ELON", "")
 }
 
-drawObject({inputsCount: 0, outputsCount: 1, color: "#121212", name: "A", width: 1})
-drawObject({inputsCount: 2, outputsCount: 1, color: "#121212", name: "AND"})
-drawObject({inputsCount: 1, outputsCount: 1, color: "#121212", name: "NOT"})
-
-function drawObject({x, y, width = 2, inputsCount, outputsCount, name, color}){
-    let height = (inputsCount >= outputsCount ? inputsCount : outputsCount) == 0 ? 1 : (inputsCount >= outputsCount ? inputsCount : outputsCount);
-    let children = [];
-
-    let shadowRect = new Konva.Rect({
-        x: x,
-        y: y,
-        width: width * 40,
-        height: height * 40,
-        fill: "#c4c4c4",
-        strokeWidth: 1,
-        stroke: "#c4c4c4",
-        cornerRadius: 4
-    });
-
-    let rect = new Konva.Rect({
-        x: x,
-        y: y,
-        width: width * 40,
-        height: height * 40,
-        fill: color,
-        strokeWidth: 3,
-        stroke: "black",
-        cornerRadius: 4,
-        draggable: true
-    });
-
-    let nameEl = new Konva.Text({
-        text: name,
-        fill: "white",
-        x: width * 20,
-        y: height * 20,
-        listening: false
-    });
-    nameEl.setX(rect.x() + width * 20 - nameEl.width() / 2);
-    nameEl.setY(rect.y() + height * 20 - nameEl.height() / 2);
-    children.push(nameEl);
-
-    rect.on('dragstart', (e) => {
-        if (!gridOn)
-            return;
-        shadowRect.show();
-        shadowRect.moveDown();
-        rect.moveToTop();
-        nameEl.moveToTop();
-    });
-    rect.on('dragend', (e) => {
-        if (!gridOn){
-            rect.position({
-                x: rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x()),
-                y: rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())
-            });
-            for (let i = 0; i < children.length; i++) {
-                children[i].position({
-                    x: rect.x() + width * 20 - children[i].width() / 2,
-                    y: rect.y() + height * 20 - children[i].height() / 2
-                });
-            }
-            return;
-        }
-        rect.position({
-            x: Math.round((rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x())) / 40) * 40,
-            y: Math.round((rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())) / 40) * 40
-        });
-        for (let i = 0; i < children.length; i++) {
-            children[i].position({
-                x: rect.x() + width * 20 - children[i].width() / 2,
-                y: rect.y() + height * 20 - children[i].height() / 2
-            });
-        }
-        shadowRect.hide();
-    });
-    rect.on('dragmove', (e) => {
-        for (let i = 0; i < children.length; i++) {
-            children[i].position({
-                x: rect.x() + width * 20 - children[i].width() / 2,
-                y: rect.y() + height * 20 - children[i].height() / 2
-            });
-        }
-        if (!gridOn)
-            return;
-        shadowRect.position({
-            x: Math.round((rect.x() < 0 ? 0 : ((rect.x() + width * 40) > workspaceWidth() ? (workspaceWidth() - width * 40) : rect.x())) / 40) * 40,
-            y: Math.round((rect.y() < 0 ? 0 : ((rect.y() + height * 40) > workspaceHeight() ? (workspaceHeight() - height * 40) : rect.y())) / 40) * 40
-        });
-    });
-
-    rect.on('mouseover', function () {
-        document.body.style.cursor = 'move';
-    });
-    rect.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-    });
-
-    mainLayer.add(shadowRect);
-    shadowRect.hide();
-
-    mainLayer.add(rect);
-    mainLayer.add(nameEl);
-
-    return {rect: rect, name: nameEl, shadowRect: shadowRect};
+const ConnectionLineElement = () => {
+    return new CircuitDOMElement("line", "Line", new Konva.Line({
+        tension: .3, 
+        stroke: "black", 
+        strokeWidth: 3
+    }));
 }
+const CircuitElement = (name, color, size) => {
+    let element = new CircuitDOMElement("container", "Rect", new Konva.Rect({
+        fill: color, 
+        stroke: "black", 
+        strokeWidth: 3, 
+        cornerRadius: 3, 
+        width: size.x, 
+        height: size.y, 
+        x: 0, 
+        y: 0,
+        draggable: true
+    }), undefined);
+
+    element.addEventListener("mouseenter", () => {
+        document.body.style.cursor = "grab";
+    });
+    element.addEventListener("mouseleave", () => {
+        document.body.style.cursor = "default";
+    });
+    element.addEventListener("dragstart", () => {
+        if (gridOn)
+            element.getElementById("shadow").instance.show();
+
+        for (let i = 0; i < element.children.length; i++)
+            element.children[i].positioningFunction(element.children[i]);
+    });
+    element.addEventListener("dragmove", () => {
+        for (let i = 0; i < element.children.length; i++)
+            element.children[i].positioningFunction(element.children[i]);
+    });
+    element.addEventListener("dragend", () => {
+        let instance = element.instance;
+
+        if (gridOn){
+            element.getElementById("shadow").instance.hide();
+
+            let newX = (Math.round(instance.x() / 40) * 40);
+            let newY = (Math.round(instance.y() / 40) * 40);
+
+            instance.x(newX < 0 ? 0 : newX > workspaceWidth() - instance.width() ? workspaceWidth() - instance.width() : newX);
+            instance.y(newY < 0 ? 0 : newY > workspaceHeight() - instance.height() ? workspaceHeight() - instance.height() : newY);
+        } else {
+            instance.x(instance.x() < 0 ? 0 : instance.x());
+            instance.y(instance.y() < 0 ? 0 : instance.y());
+        }
+
+        for (let i = 0; i < element.children.length; i++)
+            element.children[i].positioningFunction(element.children[i]);
+    })
+
+    // Name Text
+    element.addChild(new CircuitDOMElement("name", "Text", new Konva.Text({
+        text: name, 
+        fill: colorBrightness(color) > 127.5 ? "black": "white", 
+        x: 10, 
+        y: 10, 
+        fontSize: 17,
+        listening: false
+    }), element => {
+        element.instance.x(element.parent.instance.x() + element.parent.instance.width() / 2 - element.instance.width() / 2);
+        element.instance.y(element.parent.instance.y() + element.parent.instance.height() / 2 - element.instance.height() / 2);
+    }));
+
+    // Shadow
+    element.addChild(new CircuitDOMElement("shadow", "Rect", new Konva.Rect({
+        width: element.instance.width(),
+        height: element.instance.height(),
+        cornerRadius: 3,
+        fill: "#8888",
+        visible: false,
+        listening: false
+    }), element => {
+        let parent = element.parent.instance;
+        let instance = element.instance;
+        instance.moveDown();
+
+        if (gridOn){
+            let newX = (Math.round(parent.x() / 40) * 40);
+            let newY = (Math.round(parent.y() / 40) * 40);
+
+            instance.x(newX < 0 ? 0 : newX > workspaceWidth() - instance.width() ? workspaceWidth() - instance.width() : newX);
+            instance.y(newY < 0 ? 0 : newY > workspaceHeight() - instance.height() ? workspaceHeight() - instance.height() : newY);
+        }
+    }))
+
+    mainLayer.add(element.instance)
+
+    for (let i = 0; i < element.children.length; i++)
+        mainLayer.add(element.children[i].instance);
+
+    return element;
+}
+
+
+let scene = new Scene(2, 1);
+scene.addCircuit(new Circuit("AND", CircuitElement("AND", "#000", {x: 80, y: 80}), 2, 1))

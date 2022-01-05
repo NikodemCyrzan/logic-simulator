@@ -38,8 +38,6 @@ app.on('ready', () => {
   });
 
   const mainMenu = _electron.Menu.buildFromTemplate(menuTemplate);
-
-  _electron.Menu.setApplicationMenu(mainMenu);
 });
 
 function createSaveWindow() {
